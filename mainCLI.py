@@ -1,6 +1,5 @@
 import hashlib
 import json
-import os
 
 def hash_file(file_path):
     hasher = hashlib.sha256()
