@@ -5,9 +5,9 @@ import json
 def main(page: ft.Page): 
     page.title = "File Integrity Monitor"
     page.window_width = 800
-    page.window_height = 500
+    page.window_height = 600
     page.theme_mode = ft.ThemeMode.LIGHT
-    page.padding = 20
+    page.padding = 10
 
     # Variable to store selected file path
     selected_file_path = ""
@@ -59,6 +59,7 @@ def main(page: ft.Page):
                 result_display.color = ft.Colors.BLUE_600
                 current_hash_display.value = f"Current Hash: {result['current_hash']}"
                 original_hash_display.value = "Original Hash: N/A"
+                update_baseline_display()
         else:
             file_display.value = "No file selected"
             result_display.value = "Result: "
@@ -91,7 +92,62 @@ def main(page: ft.Page):
         result_display.value = "Result: Removed from Baseline"
         original_hash_display.value = "Original Hash: "
         current_hash_display.value = "Current Hash: "
+        update_baseline_display()
         page.update()
+
+    # Function to update baseline display
+    def update_baseline_display():
+        baseline = load_baseline()
+        baseline_controls.clear()
+        
+        if not baseline:
+            baseline_controls.append(
+                ft.Text(
+                    "No files in baseline",
+                    size=14,
+                    color=ft.Colors.GREY_500,
+                    italic=True,
+                )
+            )
+        else:
+            for file_path, file_hash in baseline.items():
+                # Create a container for each baseline entry
+                entry_container = ft.Container(
+                    content=ft.Column(
+                        controls=[
+                            ft.Text(
+                                f"File: {file_path}",
+                                size=12,
+                                weight=ft.FontWeight.W_500,
+                                color=ft.Colors.BLACK87,
+                            ),
+                            ft.Text(
+                                f"Hash: {file_hash}",
+                                size=11,
+                                color=ft.Colors.GREY_600,
+                                font_family="monospace",
+                            ),
+                        ],
+                        spacing=4,
+                    ),
+                    padding=ft.padding.all(8),
+                    margin=ft.margin.only(bottom=8),
+                    bgcolor=ft.Colors.GREY_50,
+                    border=ft.border.all(1, ft.Colors.GREY_200),
+                    border_radius=ft.border_radius.all(6),
+                )
+                baseline_controls.append(entry_container)
+        
+        baseline_column.controls = baseline_controls
+        page.update()
+
+    # Create baseline display components
+    baseline_controls = []
+    baseline_column = ft.Column(
+        controls=[],
+        spacing=8,
+        scroll=ft.ScrollMode.AUTO,
+    )
 
     # Create the file picker
     file_picker = ft.FilePicker(on_result=file_picker_result)
@@ -111,7 +167,7 @@ def main(page: ft.Page):
             text_align=ft.TextAlign.CENTER,
         ),
         alignment=ft.alignment.center,
-        margin=ft.margin.only(bottom=30),
+        margin=ft.margin.only(bottom=15),
     )
 
     # Browse button
@@ -179,8 +235,8 @@ def main(page: ft.Page):
                         ],
                         spacing=10,
                     ),
-                    padding=ft.padding.all(20),
-                    margin=ft.margin.only(bottom=10),
+                    padding=ft.padding.all(15),
+                    margin=ft.margin.only(bottom=5),
                 ),
                 
                 # Divider
@@ -204,6 +260,27 @@ def main(page: ft.Page):
                     ),
                     padding=ft.padding.all(20),
                 ),
+
+                # Divider
+                ft.Divider(color=ft.Colors.GREY_300, height=1),
+
+                ft.Container(
+                    content=ft.Column(
+                        controls=[
+                            ft.Text("Current Baseline", size=18, weight=ft.FontWeight.W_500, color=ft.Colors.BLACK87),
+                            ft.Container(
+                                content=baseline_column,
+                                height=150,
+                                padding=ft.padding.all(10),
+                                bgcolor=ft.Colors.WHITE,
+                                border=ft.border.all(1, ft.Colors.GREY_300),
+                                border_radius=ft.border_radius.all(8),
+                            ),
+                        ],
+                        spacing=10,
+                    ),
+                    padding=ft.padding.all(20),
+                )
             ],
             spacing=0,
         ),
@@ -241,5 +318,8 @@ def main(page: ft.Page):
             expand=True,
         )
     )
+    
+    # Initialize baseline display
+    update_baseline_display()
 
 ft.app(target=main)
