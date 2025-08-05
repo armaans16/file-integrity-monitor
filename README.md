@@ -3,19 +3,7 @@
 
 **File Integrity Monitor** is a Python application designed to verify the integrity of files by generating and comparing cryptographic hashes. It helps detect file tampering or corruption by maintaining a secure baseline and offering both CLI and GUI modes for interaction.
 
-![App Screenshot Placeholder](https://via.placeholder.com/800x200.png?text=File+Integrity+Monitor)
-
----
-
-## 🔐 Features at a Glance
-
-<table>
-<tr>
-<td align="center"><img src="https://via.placeholder.com/250x140.png?text=Hash+Generator" width="250"><br><b>Generate Hashes</b></td>
-<td align="center"><img src="https://via.placeholder.com/250x140.png?text=Compare+Integrity" width="250"><br><b>Check File Integrity</b></td>
-<td align="center"><img src="https://via.placeholder.com/250x140.png?text=GUI+Interface" width="250"><br><b>User-Friendly GUI</b></td>
-</tr>
-</table>
+![showcase](showcase.jpg)
 
 ---
 
